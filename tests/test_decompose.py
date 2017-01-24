@@ -80,3 +80,23 @@ def test_olivine_decompose():
     np.testing.assert_allclose(decomp[3], ol_c_ort, atol=0.1)
     np.testing.assert_allclose(decomp[4], ol_c_mon, atol=0.1)
     np.testing.assert_allclose(decomp[5], ol_c_tri, atol=0.1)
+
+def test_isortho():
+    "Check that out orthogonal check routine works"
+    # These should be true
+    assert pytasa.decompose._isortho([1, 0, 0], [0, 1, 0], [0, 0, 1])
+    assert pytasa.decompose._isortho([0, 1, 0], [1, 0, 0], [0, 0, 1])
+    assert pytasa.decompose._isortho([1, 0, 0], [0, 0, 1], [0, 1, 0])
+    assert pytasa.decompose._isortho([0, 0, 1], [0, 1, 0], [1, 0, 0])
+    assert pytasa.decompose._isortho([1, 0, 0], [0, 0, 1], [0, 1, 0])
+    assert pytasa.decompose._isortho([0, 1, 0], [0, 0, 1], [1, 0, 0])
+    assert pytasa.decompose._isortho([-1, 0, 0], [0, 1, 0], [0, 0, 1])
+    assert pytasa.decompose._isortho([0, -1, 0], [1, 0, 0], [0, 0, 1])
+    assert pytasa.decompose._isortho([-1, 0, 0], [0, 0, 1], [0, 1, 0])
+    assert pytasa.decompose._isortho([0, 0, -1], [0, 1, 0], [1, 0, 0])
+    assert pytasa.decompose._isortho([-1, 0, 0], [0, 0, 1], [0, 1, 0])
+    assert pytasa.decompose._isortho([0, -1, 0], [0, 0, 1], [1, 0, 0])
+    # These should be false
+    assert not(pytasa.decompose._isortho([1, 0, 0], [0, 1, 0.01], [0, 0, 1]))
+    assert not(pytasa.decompose._isortho([1, 0, 0], [0.01, 1, 0], [0, 0, 1]))
+    assert not(pytasa.decompose._isortho([1, 0, 0], [0, 1, 0], [0.01, 0, 1]))
